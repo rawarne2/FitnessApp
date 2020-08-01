@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions, Alert } from "react-native";
 import { Button, Input, Item } from "native-base";
 import PropTypes from 'prop-types';
+import { validateEmail, validatePassword } from '../validation';
+import { Auth } from "aws-amplify";
 
 
 function SignUp(props: any) {
@@ -10,6 +12,28 @@ function SignUp(props: any) {
     email: '',
     password: '',
   })
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+  })
+
+  async function onSubmit() {
+    const emailError = validateEmail(state.email)
+    const passwordError = validatePassword(state.password)
+    if(emailError || passwordError) {
+      setErrors({email: emailError, password: passwordError})
+    } else {
+      try {
+        const user = await Auth.signUp({
+          username: state.email,
+          password: state.password
+        })
+        console.log(user)
+      } catch (error) {
+        Alert.alert(error.message)
+      }
+    }
+  }
 
   if(props.authState === 'signUp') {
     return (
@@ -20,9 +44,10 @@ function SignUp(props: any) {
             style={styles.input}
             placeholder="Email"
             value={state.email}
-            onChangeText={text => setState({ ...state, email: text })}
+            onChangeText={text => setState({ ...state, email: text.toLowerCase() })}
           />
         </Item>
+        <Text style={styles.error}>{errors.email}</Text>
         <Item underline style={styles.item}>
           <Input
             style={styles.input}
@@ -31,10 +56,11 @@ function SignUp(props: any) {
             onChangeText={text => setState({ ...state, password: text })}
           />
         </Item>
+        <Text style={styles.error}>{errors.password}</Text>
         <Button
           block
           style={styles.button}
-          onPress={() => console.log('Submit button pressed')}
+          onPress={() => onSubmit()}
           accessibilityLabel="back to signIn"
         >
           <Text style={styles.buttonText}>Submit</Text>
@@ -72,11 +98,13 @@ const styles = StyleSheet.create({
     flex: 1, 
     height: '100%',
     justifyContent: 'center',
+    width: '100%',
+    padding: 48,
   }, 
   button: {
     backgroundColor: 'lightseagreen', 
     height: 40,
-    margin: 16,
+    marginVertical: 16,
   },
   buttonText: {
     textTransform: 'uppercase',
@@ -85,7 +113,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'blue', 
     borderBottomWidth: 1,
-    marginBottom: 20,
+    marginBottom: 8,
   }, 
   links: {
     flexDirection: 'row', 
@@ -99,6 +127,10 @@ const styles = StyleSheet.create({
   },
   item: {
     borderBottomWidth: 0,
-    width: '75%'
+  },
+  error: {
+    color: 'red',
+    paddingBottom: 12,
+    marginLeft: 4,
   }
 })
