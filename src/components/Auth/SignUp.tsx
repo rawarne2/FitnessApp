@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, useWindowDimensions, Alert } from "react-native";
-import { Button, Input, Item } from "native-base";
-import PropTypes from 'prop-types';
-import { validateEmail, validatePassword } from '../validation';
+import { View, Text, StyleSheet, Alert } from "react-native";
+import { Button } from "native-base";
+import { validateEmail, validatePassword } from '../../validation';
 import { Auth } from "aws-amplify";
+import { red, darkBlue } from '../../styles/colors';
+import InputComponent from "../shared/InputComponent";
 
 
 function SignUp(props: any) {
@@ -28,7 +29,7 @@ function SignUp(props: any) {
           username: state.email,
           password: state.password
         })
-        console.log(user)
+        props.onStateChange("confirmSignUp", user)
       } catch (error) {
         Alert.alert(error.message)
       }
@@ -39,24 +40,18 @@ function SignUp(props: any) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Sign Up</Text>
-        <Item underline style={styles.item}>
-          <Input
-            style={styles.input}
-            placeholder="Email"
-            value={state.email}
-            onChangeText={text => setState({ ...state, email: text.toLowerCase() })}
-          />
-        </Item>
-        <Text style={styles.error}>{errors.email}</Text>
-        <Item underline style={styles.item}>
-          <Input
-            style={styles.input}
-            placeholder="Password"
-            value={state.password}
-            onChangeText={text => setState({ ...state, password: text })}
-          />
-        </Item>
-        <Text style={styles.error}>{errors.password}</Text>
+        <InputComponent
+          value={state.email}
+          onChangeText={text => setState({ ...state, email: text.toLowerCase() })} 
+          errors={errors.email}
+          name={'Email'}
+        />
+        <InputComponent
+          value={state.password}
+          onChangeText={text => setState({ ...state, password: text.toLowerCase() })} 
+          errors={errors.password}
+          name={'Password'}
+        />
         <Button
           block
           style={styles.button}
@@ -102,7 +97,7 @@ const styles = StyleSheet.create({
     padding: 48,
   }, 
   button: {
-    backgroundColor: 'lightseagreen', 
+    backgroundColor: red, 
     height: 40,
     marginVertical: 16,
   },
@@ -111,19 +106,20 @@ const styles = StyleSheet.create({
   }, 
   input: {
     height: 40,
-    borderColor: 'blue', 
+    borderColor: darkBlue, 
     borderBottomWidth: 1,
     marginBottom: 8,
   }, 
   links: {
     flexDirection: 'row', 
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   title: {
     textAlign: 'center', 
     fontSize: 18,
     fontWeight: '600',
     textTransform: 'uppercase',
+    paddingBottom: 40,
   },
   item: {
     borderBottomWidth: 0,

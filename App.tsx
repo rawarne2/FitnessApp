@@ -1,25 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Amplify from 'aws-amplify';
-import config from './aws-exports';
-import { Authenticator, SignIn, ConfirmSignIn, ConfirmSignUp, ForgotPassword } from 'aws-amplify-react-native';
-import SignUp from './src/components/SignUp';
+import awsExports from './aws-exports';
+import { Authenticator, ConfirmSignIn, ConfirmSignUp, ForgotPassword } from 'aws-amplify-react-native';
+import SignUp from './src/components/Auth/SignUp';
+import SignIn from './src/components/Auth/SignIn';
+import Home from './src/components/Home';
+Amplify.configure(awsExports)
 
-Amplify.configure(config)
-
-function Home (props:any) {
-  if(props.authState === 'signedIn') return <Text>Home</Text>
-  else return <></>
-}
-
+// figure out password attempts exceeded
 export default function App() {
   return (
     <View style={styles.container}>
       <Authenticator
         hideDefault={true}
         authState="signIn"
-        onStateChange={authState => console.log('authState: ', authState)}
+        onStateChange={authState => console.log('authState: ', authState,)}
         usernameAttributes="email">
         <Home />
         <SignUp />
