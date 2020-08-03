@@ -14,9 +14,7 @@ function ConfirmSignIn(props: any) {
 
   async function onSubmit() {
     try {
-      const user = await Auth.confirmSignIn(props.username, state.code)
-      await console.log('user >>>>>>>>', user)
-      await props.onStateChange("confirmSignUp", user)
+      await Auth.confirmSignIn(props.username, state.code)
     } catch (error) {
       Alert.alert(error.message)
     }
@@ -25,11 +23,11 @@ function ConfirmSignIn(props: any) {
   if(props.authState === 'confirmSignIn') {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Reset your password</Text>
+        <Text style={styles.title}>Confirm Sign In</Text>
         <InputComponent
           value={state.code}
           onChangeText={text => setState({ ...state, code: text })}
-          name={'Code'}
+          name={'Confirmation Code'}
         />
         <Button
           block

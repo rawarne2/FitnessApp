@@ -4,6 +4,7 @@ import { Text, Button } from 'native-base';
 import { Auth } from 'aws-amplify';
 
 const Home = (props: any) => {
+  console.log({props, Auth})
   if(props.authState === 'signedIn') return (
     <View>
       <Text>Home</Text>

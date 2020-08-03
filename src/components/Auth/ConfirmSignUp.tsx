@@ -24,13 +24,12 @@ function ConfirmSignUp(props: any) {
     } else {
       try {
         const user = await Auth.confirmSignUp(state.email, state.code)
-        await props.onStateChange("confirmSignUp", user)
+        props.onStateChange("signedIn", user)
       } catch (error) {
         Alert.alert(error.message)
       }
     }
   }
-  console.log({props})
 
   if(props.authState === 'confirmSignUp') {
     return (

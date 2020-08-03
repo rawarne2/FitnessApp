@@ -27,7 +27,6 @@ function SignIn(props: any) {
           username: state.email,
           password: state.password
         })
-        await props.onStateChange("confirmSignIn", user)
       } catch (error) {
         Alert.alert(error.message)
       }
@@ -48,6 +47,7 @@ function SignIn(props: any) {
           value={state.password}
           onChangeText={text => setState({ ...state, password: text })} 
           name={'Password'}
+          secureTextEntry={true}
         />
         <Button
           block

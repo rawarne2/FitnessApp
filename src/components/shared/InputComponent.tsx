@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
-  useWindowDimensions,
-  Alert
 } from "react-native";
 import { Input, Item } from "native-base";
 import PropTypes from "prop-types";
@@ -19,6 +17,8 @@ export default function InputComponent(props: InputComponent.propTypes) {
         placeholder={props.name}
         value={props.value}
         onChangeText={props.onChangeText}
+        autoCapitalize={'none'}
+        secureTextEntry={props.secureTextEntry}
       />
     </Item>
     <Text style={styles.error}>{props.errors}</Text>
@@ -32,6 +32,7 @@ InputComponent.propTypes = {
   onChangeText: PropTypes.func.isRequired,
   errors: PropTypes.string,
   name: PropTypes.string.isRequired,
+  secureTextEntry: PropTypes.bool,
 }
 
 const styles = StyleSheet.create({

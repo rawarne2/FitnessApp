@@ -51,6 +51,7 @@ function SignUp(props: any) {
           onChangeText={text => setState({ ...state, password: text.toLowerCase() })} 
           errors={errors.password}
           name={'Password'}
+          secureTextEntry={true}
         />
         <Button
           block
