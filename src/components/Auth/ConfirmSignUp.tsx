@@ -7,11 +7,11 @@ import { red, darkBlue } from '../../styles/colors';
 import InputComponent from "../shared/InputComponent";
 
 
-function SignIn(props: any) {
+function ConfirmSignUp(props: any) {
 
   const [state, setState] = useState({
     email: '',
-    password: '',
+    code: '',
   })
   const [errors, setErrors] = useState({
     email: '',
@@ -23,21 +23,19 @@ function SignIn(props: any) {
       setErrors({email: emailError})
     } else {
       try {
-        const user = await Auth.signIn({
-          username: state.email,
-          password: state.password
-        })
-        await props.onStateChange("confirmSignIn", user)
+        const user = await Auth.confirmSignUp(state.email, state.code)
+        await props.onStateChange("confirmSignUp", user)
       } catch (error) {
         Alert.alert(error.message)
       }
     }
   }
+  console.log({props})
 
-  if(props.authState === 'signIn') {
+  if(props.authState === 'confirmSignUp') {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Confirm Code</Text>
         <InputComponent
           value={state.email}
           onChangeText={text => setState({ ...state, email: text })} 
@@ -45,34 +43,34 @@ function SignIn(props: any) {
           name={'Email'}
         />
         <InputComponent
-          value={state.password}
-          onChangeText={text => setState({ ...state, password: text })} 
-          name={'Password'}
+          value={state.code}
+          onChangeText={text => setState({ ...state, code: text })} 
+          name={'Code'}
         />
         <Button
           block
           style={styles.button}
           onPress={() => onSubmit()}
-          accessibilityLabel="submit"
+          accessibilityLabel="confirm"
         >
-          <Text style={styles.buttonText}>Submit</Text>
+          <Text style={styles.buttonText}>Confirm</Text>
         </Button>
         <View style={styles.links}>
           <Button
               transparent
               color="black"
               onPress={() => props.onStateChange("signUp", {})}
-              accessibilityLabel="back to confirm code"
+              accessibilityLabel="sign up"
             >
               <Text>Sign Up</Text>
             </Button>
             <Button
               transparent
               color="black"
-              onPress={() => props.onStateChange("forgotPassword", {})}
+              onPress={() => props.onStateChange("signIn", {})}
               accessibilityLabel="back to confirm code"
             >
-              <Text>Forgot Password</Text>
+              <Text>Back to Sign In</Text>
             </Button>
         </View>
       </View>
@@ -83,7 +81,7 @@ function SignIn(props: any) {
   }
 }
 
-export default SignIn;
+export default ConfirmSignUp;
 
 const styles = StyleSheet.create({
   container: {

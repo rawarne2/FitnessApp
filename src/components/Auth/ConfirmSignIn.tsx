@@ -1,78 +1,52 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button } from "native-base";
-import { validateEmail } from '../../validation';
 import { Auth } from "aws-amplify";
 import { red, darkBlue } from '../../styles/colors';
 import InputComponent from "../shared/InputComponent";
 
 
-function SignIn(props: any) {
+function ConfirmSignIn(props: any) {
 
   const [state, setState] = useState({
-    email: '',
-    password: '',
-  })
-  const [errors, setErrors] = useState({
-    email: '',
+    code: '',
   })
 
   async function onSubmit() {
-    const emailError = validateEmail(state.email)
-    if(emailError) {
-      setErrors({email: emailError})
-    } else {
-      try {
-        const user = await Auth.signIn({
-          username: state.email,
-          password: state.password
-        })
-        await props.onStateChange("confirmSignIn", user)
-      } catch (error) {
-        Alert.alert(error.message)
-      }
+    try {
+      const user = await Auth.confirmSignIn(props.username, state.code)
+      await console.log('user >>>>>>>>', user)
+      await props.onStateChange("confirmSignUp", user)
+    } catch (error) {
+      Alert.alert(error.message)
     }
   }
 
-  if(props.authState === 'signIn') {
+  if(props.authState === 'confirmSignIn') {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Sign In</Text>
+        <Text style={styles.title}>Reset your password</Text>
         <InputComponent
-          value={state.email}
-          onChangeText={text => setState({ ...state, email: text })} 
-          errors={errors.email}
-          name={'Email'}
-        />
-        <InputComponent
-          value={state.password}
-          onChangeText={text => setState({ ...state, password: text })} 
-          name={'Password'}
+          value={state.code}
+          onChangeText={text => setState({ ...state, code: text })}
+          name={'Code'}
         />
         <Button
           block
           style={styles.button}
           onPress={() => onSubmit()}
-          accessibilityLabel="submit"
+          accessibilityLabel="Confirm"
         >
-          <Text style={styles.buttonText}>Submit</Text>
+          <Text style={styles.buttonText}>Confirm</Text>
         </Button>
         <View style={styles.links}>
           <Button
               transparent
               color="black"
-              onPress={() => props.onStateChange("signUp", {})}
-              accessibilityLabel="back to confirm code"
+              onPress={() => props.onStateChange("signIn", {})}
+              accessibilityLabel="sign in"
             >
-              <Text>Sign Up</Text>
-            </Button>
-            <Button
-              transparent
-              color="black"
-              onPress={() => props.onStateChange("forgotPassword", {})}
-              accessibilityLabel="back to confirm code"
-            >
-              <Text>Forgot Password</Text>
+              <Text>Back to Sign In</Text>
             </Button>
         </View>
       </View>
@@ -83,7 +57,7 @@ function SignIn(props: any) {
   }
 }
 
-export default SignIn;
+export default ConfirmSignIn;
 
 const styles = StyleSheet.create({
   container: {

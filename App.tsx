@@ -3,10 +3,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Amplify from 'aws-amplify';
 import awsExports from './aws-exports';
-import { Authenticator, ConfirmSignIn, ConfirmSignUp, ForgotPassword } from 'aws-amplify-react-native';
+import { Authenticator } from 'aws-amplify-react-native';
 import SignUp from './src/components/Auth/SignUp';
 import SignIn from './src/components/Auth/SignIn';
 import Home from './src/components/Home';
+import ConfirmSignUp from './src/components/Auth/ConfirmSignUp';
+import ForgotPassword from './src/components/Auth/ForgotPassword';
+import ConfirmSignIn from './src/components/Auth/ConfirmSignIn';
 Amplify.configure(awsExports)
 
 // figure out password attempts exceeded
