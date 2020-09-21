@@ -1,0 +1,69 @@
+version: '3.7'
+
+services:
+  # database:
+  #   # image: 'postgres:12.2'
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #   container_name: '{APP_NAME}-db'
+  #   build:
+  #     context: ./data
+  #     target: db
+  #   restart: always
+  #   ports: 
+  #     - ${PG_HOST_PORT:-5432}:${PG_PORT:-5432}
+  #   volumes:
+  #     - app_db_volume:/var/lib/postgresql/data
+  #   # networks:
+  # app:
+  #     build: .
+  #     ports:
+  #         - "8080:8080"
+
+  client:
+    # container_name: '${APP_NAME}-client'
+    # image: '${APP_NAME}-client'
+    # image: node
+    build: ./client
+    restart: unless-stopped
+    ports:
+      - 19001:19001
+      - 19000:19000
+      - 19002:19002
+    working_dir: /client
+    # volumes: 
+    #   - ./client:/client
+    #   - /client/node_modules
+    # networks:
+    #   - webappnetwork
+    # entrypoint: ["expo", "start"]
+    # entrypoint: ["ls"]
+
+    env_file:
+      - .env
+    # build: ./client/
+    # build:
+    #   context: .
+    #   args: 
+    #     BUILD_GROUP_ID: ${BUILD_GROUP_ID}
+    #     BUILD_USER_ID: ${BUILD_USER_ID}
+    # ports:
+    #   - ${CLIENT_PORT:-80}:${CLIENT_PORT:-80}
+    #   - 9001:9001
+    # working_dir: /work
+    # command: "expo start"
+    # restart: unless-stopped
+    # volumes: 
+    #   - ./client:/work
+    #   - ./dist:/work/dist
+
+      
+# volumes: 
+#   app_db_volume:
+#     name: '{APP_NAME}_${APP_ENV}_volume'
+networks:
+    webappnetwork:
+        driver: bridge

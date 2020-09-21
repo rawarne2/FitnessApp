@@ -10,7 +10,7 @@ import { darkBlue } from "../../styles/colors";
 
 export default function InputComponent(props: InputComponent.propTypes) {
   return (
-    <View>
+    <View style={props.style}>
       <Item style={styles.item}>
       <Input
         style={styles.input}
@@ -33,6 +33,7 @@ InputComponent.propTypes = {
   errors: PropTypes.string,
   name: PropTypes.string.isRequired,
   secureTextEntry: PropTypes.bool,
+  style: PropTypes.any
 }
 
 const styles = StyleSheet.create({
