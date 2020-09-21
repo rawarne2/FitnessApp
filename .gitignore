@@ -1,10 +1,10 @@
 # OSX
 #
-.DS_Store
+client/.DS_Store
 
 # Xcode
 #
-build/
+client/build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -24,7 +24,7 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
-build/
+client/build/
 .idea
 .gradle
 local.properties
@@ -32,13 +32,13 @@ local.properties
 
 # node.js
 #
-node_modules/
-npm-debug.log
-yarn-error.log
+client/node_modules/
+client/npm-debug.log
+client/yarn-error.log
 
 # BUCK
-buck-out/
-\.buckd/
+client/buck-out/
+client\.buckd/
 *.keystore
 
 # fastlane
@@ -56,24 +56,26 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
+client/ios/Pods/
 
 # Expo
-.expo/*
-web-build/
+client/.expo/*
+client/web-build/
 
 #amplify
-amplify/\#current-cloud-backend
-amplify/.config/local-*
-amplify/mock-data
-amplify/backend/amplify-meta.json
-amplify/backend/awscloudformation
-build/
-dist/
-node_modules/
-aws-exports.js
-awsconfiguration.json
-amplifyconfiguration.json
-amplify-build-config.json
-amplify-gradle-config.json
-amplifytools.xcconfig
+client/amplify/\#current-cloud-backend
+client/amplify/.config/local-*
+client/amplify/mock-data
+client/amplify/backend/amplify-meta.json
+client/amplify/backend/awscloudformation
+client/build/
+client/dist/
+client/node_modules/
+client/aws-exports.js
+client/awsconfiguration.json
+client/amplifyconfiguration.json
+client/amplify-build-config.json
+client/amplify-gradle-config.json
+client/amplifytools.xcconfig
+
+.env
