@@ -9,10 +9,10 @@ const Home = (props: any) => {
   // if !createdProfile ? create profile : go to main screen
   if(props.authState === 'signedIn') return (
     <View>
-      <CreateProfile />
-      <Button onPress={() => Auth.signOut()}>
+      {/* <Button onPress={() => Auth.signOut()}>
         <Text>Sign Out</Text>
-      </Button>
+      </Button> */}
+      <CreateProfile />
     </View>
   )
   return <></>

@@ -1,0 +1,3 @@
+To start the application, run 'expo start'
+To run the react dev tools, in another terminal, run 'react-devtools' and
+make sure that the sure that the dropdown in the top left corner of the Chrome console says debuggerWorker.js

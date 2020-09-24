@@ -1,0 +1,10 @@
+{
+	"auth": {
+		"fitnessapp79aec870": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}

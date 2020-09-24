@@ -1,0 +1,17 @@
+{
+    "providers": [
+        "awscloudformation"
+    ],
+    "projectName": "FitnessApp",
+    "version": "3.0",
+    "frontend": "javascript",
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "/client/",
+            "DistributionDir": "/client/",
+            "BuildCommand": "npm run build",
+            "StartCommand": "expo start"
+        }
+    }
+}
