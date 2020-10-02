@@ -19,6 +19,9 @@ export default function InputComponent(props: InputComponent.propTypes) {
         onChangeText={props.onChangeText}
         autoCapitalize={'none'}
         secureTextEntry={props.secureTextEntry}
+        textContentType={props.textContentType}
+        keyboardType={props.keyboardType}
+        {...props}
       />
     </Item>
     <Text style={styles.error}>{props.errors}</Text>
@@ -33,7 +36,10 @@ InputComponent.propTypes = {
   errors: PropTypes.string,
   name: PropTypes.string.isRequired,
   secureTextEntry: PropTypes.bool,
-  style: PropTypes.any
+  style: PropTypes.any,
+  onBlur: PropTypes.func,
+  textContentType: PropTypes.string,
+  keyboardType: PropTypes.string,
 }
 
 const styles = StyleSheet.create({
