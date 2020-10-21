@@ -141,6 +141,7 @@ export default function CreateProfile(props: any) {
           rules={{ required: true }}
           defaultValue={0}
         />
+        {/* add birthday to send hbd notifications and stuff */}
         <Button onPress={handleSubmit(onSubmit)}>
           <Text>Submit</Text>
         </Button>

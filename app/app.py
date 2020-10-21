@@ -1,16 +1,24 @@
-import tornado.ioloop
-import tornado.web
+from flask import Flask
+from flask_graphql import GraphQLView
 
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("Hello, world")
+from schema import schema
+from database import db_session
 
-def make_app():
-    return tornado.web.Application([
-        (r"/", MainHandler),
-    ])
+app = Flask(__name__)
+app.debug = True
 
-if __name__ == "__main__":
-    app = make_app()
-    app.listen(8888)
-    tornado.ioloop.IOLoop.current().start()
+app.add_url_rule(
+    '/graphql',
+    view_func=GraphQLView.as_view(
+        'graphql',
+        schema=schema,
+        graphiql=True # for having the GraphiQL interface
+    )
+)
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
+
+if __name__ == '__main__':
+    app.run()
