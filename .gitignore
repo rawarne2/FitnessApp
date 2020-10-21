@@ -85,3 +85,5 @@ app/venv
 app/env
 
 app/database.ini
+
+amplify/team-provider-info.json
