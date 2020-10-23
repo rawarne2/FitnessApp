@@ -30,3 +30,10 @@ This project will be a fitness app for users to create or get recommended workou
   - create user from front end
   - create models and schema for exercise library
   - create ui layout for exercise library
+
+
+## How to run
+
+- To start the front end in expo, run 'expo start'
+- To run the react dev tools, in another terminal, run 'react-devtools'. In a browser, go to http://localhost:19001/debugger-ui/ and make sure that the sure that the dropdown in the top left corner of the Chrome console says debuggerWorker.js
+- run app/app.py to start the backend 
