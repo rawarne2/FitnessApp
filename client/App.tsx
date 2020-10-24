@@ -12,29 +12,40 @@ import ForgotPassword from './src/components/auth/ForgotPassword';
 import ConfirmSignIn from './src/components/auth/ConfirmSignIn';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { Root } from "native-base";
+
+const client = new ApolloClient({
+  uri: 'http://127.0.0.1:5000/graphql',  // change to allow productions uri and get from env
+  cache: new InMemoryCache()
+});
 
 Amplify.configure(awsExports)
 
 // figure out password attempts exceeded
 export default function App() {
   return (
-    <Provider store={store}>
-      <View style={styles.container}>
-        <Authenticator
-          hideDefault={true}
-          authState="signIn"
-          onStateChange={authState => console.log('authState: ', authState,)}
-          usernameAttributes="email">
-          <Home />
-          <SignUp />
-          <SignIn />
-          <ConfirmSignUp />
-          <ConfirmSignIn />
-          <ForgotPassword />
-        </Authenticator>
-        <StatusBar style="auto" />
-      </View>
-    </Provider>
+    <Root>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <View style={styles.container}>
+            <Authenticator
+              hideDefault={true}
+              authState="signIn"
+              onStateChange={authState => console.log('authState: ', authState,)}
+              usernameAttributes="email">
+              <Home />
+              <SignUp />
+              <SignIn />
+              <ConfirmSignUp />
+              <ConfirmSignIn />
+              <ForgotPassword />
+            </Authenticator>
+            <StatusBar style="auto" />
+          </View>
+        </Provider>
+      </ApolloProvider>
+    </Root>
   );
 }
 

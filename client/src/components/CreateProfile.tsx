@@ -2,21 +2,40 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button } from "native-base";
 import { Auth } from "aws-amplify";
 import InputComponent from "./shared/InputComponent";
-import { StyleSheet, Picker } from "react-native";
+import { StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useForm, Controller } from "react-hook-form";
 import Slider from "@react-native-community/slider";
 import { darkBlue, red } from "../styles/colors";
 import { useDispatch, useSelector } from "react-redux";
-import User, { UserState } from "../redux/reducers/userReducer";
+import { UserState } from "../redux/reducers/userReducer";
 import { setCurrentUser } from "../redux/actions";
+import { useMutation, gql, useQuery } from '@apollo/client';
+import { Toast } from 'native-base';
 
-export default function CreateProfile(props: any) {
-  // set up user then see if user has created profile
+const CREATE_USER = gql`
+  mutation createUser($sub: String!, $emailAddress: String!, $firstName: String!, $lastName: String!, $height: Int!, $weight: Int!) {
+    createUser (sub: $sub, emailAddress: $emailAddress, firstName: $firstName, lastName: $lastName, height: $height, weight: $weight){
+      user(sub: $sub) {
+        sub
+        emailAddress
+        height
+        weight
+        lastLogin
+        id
+      }
+    }
+}
+`;
+
+
+export default function CreateProfile(props: any) {  // TODO: only show this component if user hasnt done this before
 
   const [awsUser, setAwsUser] = useState(null);
+  const [createUserMutation, val] = useMutation(CREATE_USER)
 
-  useEffect(() => {
+
+  useEffect(() => {  // put in store but in higher level component
     Auth.currentUserInfo().then(user => {
       setAwsUser(user)
     })
@@ -28,12 +47,28 @@ export default function CreateProfile(props: any) {
   let user = useSelector((user: UserState) => user)
 
   const onSubmit = (values: any) => {
-    console.log(values);
-    dispatch(setCurrentUser({
+    Toast.show({
+      text: `Welcome ${values.firstName} ${values.lastName}!😊`,
+      buttonText: 'Okay',
+      position: 'top',
+    })
+
+    createUserMutation({variables: {
       firstName: values.firstName,
       lastName: values.lastName,
       height: values.height,
       sub: awsUser?.attributes?.sub,
+      weight: values.weight,
+      emailAddress: awsUser?.attributes?.email
+    }}).catch(err => console.log(err))
+
+    createUserMutation()
+
+    dispatch(setCurrentUser({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      height: values.height,
+      sub: awsUser?.attributes?.sub, // remove from state requirement. Already in state from aws
       weight: values.weight,
       fitnessLevel: values.fitnessLevel
     }))
@@ -120,7 +155,7 @@ export default function CreateProfile(props: any) {
           rules={{ required: true }}
           defaultValue={66}
         />
-                <Controller
+        {/* <Controller
           control={control}
           render={({ onChange, onBlur, value }: any) => (
             <View>
@@ -140,11 +175,12 @@ export default function CreateProfile(props: any) {
           name="fitnessLevel"
           rules={{ required: true }}
           defaultValue={0}
-        />
+        /> */}
         {/* add birthday to send hbd notifications and stuff */}
         <Button onPress={handleSubmit(onSubmit)}>
           <Text>Submit</Text>
         </Button>
+        {/* <Hello /> */}
       </KeyboardAwareScrollView>
     </View>
   );

@@ -33,7 +33,7 @@ class Query(ObjectType):
 
     all_users = SQLAlchemyConnectionField(User.connection)
 
-    user = Field(User, sub=String(required=True))  # change to use sub
+    user = Field(User, sub=String(required=True))
 
     @staticmethod
     def resolve_user(self, info, sub):
@@ -44,14 +44,14 @@ class Query(ObjectType):
 
 class CreateUser(graphene.Mutation):
     class Arguments:
-        sub = String()
-        email_address = String()
-        first_name = String()
-        last_name = String()
-        height = Int()
-        weight = Int()
+        sub = String(required=True)
+        email_address = String(required=True)
+        first_name = String(required=True)
+        last_name = String(required=True)
+        height = Int(required=True)
+        weight = Int(required=True)
 
-    user = Field(User, email_address=String(required=True))  # change to use sub
+    user = Field(User, sub=String(required=True))
 
     @staticmethod
     def resolve_user(self, info, sub):
