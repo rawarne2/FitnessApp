@@ -7,10 +7,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useForm, Controller } from "react-hook-form";
 import Slider from "@react-native-community/slider";
 import { darkBlue, red } from "../styles/colors";
-import { useDispatch, useSelector } from "react-redux";
-import { UserState } from "../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../redux/actions";
-import { useMutation, gql, useQuery } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { Toast } from 'native-base';
 
 const CREATE_USER = gql`
@@ -31,20 +30,14 @@ const CREATE_USER = gql`
 
 export default function CreateProfile(props: any) {  // TODO: only show this component if user hasnt done this before
 
-  const [awsUser, setAwsUser] = useState(null);
-  const [createUserMutation, val] = useMutation(CREATE_USER)
+  const [createUserMutation, createUserData] = useMutation(CREATE_USER)
 
-
-  useEffect(() => {  // put in store but in higher level component
-    Auth.currentUserInfo().then(user => {
-      setAwsUser(user)
-    })
-  }, [])
 
   const { handleSubmit, control, errors } = useForm();
 
   let dispatch = useDispatch();
-  let user = useSelector((user: UserState) => user)
+  // let user = useSelector((user: UserState) => user)
+  // console.log({user})
 
   const onSubmit = (values: any) => {
     Toast.show({
@@ -53,26 +46,26 @@ export default function CreateProfile(props: any) {  // TODO: only show this com
       position: 'top',
     })
 
-    createUserMutation({variables: {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      height: values.height,
-      sub: awsUser?.attributes?.sub,
-      weight: values.weight,
-      emailAddress: awsUser?.attributes?.email
-    }}).catch(err => console.log(err))
-
-    createUserMutation()
-
-    dispatch(setCurrentUser({
-      firstName: values.firstName,
-      lastName: values.lastName,
-      height: values.height,
-      sub: awsUser?.attributes?.sub, // remove from state requirement. Already in state from aws
-      weight: values.weight,
-      fitnessLevel: values.fitnessLevel
-    }))
+    createUserMutation({
+      variables: {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        height: values.height,
+        sub: props.userState?.sub,
+        weight: values.weight,
+        emailAddress: props.userState?.email,
+      }
+    }).then(() => {
+      dispatch(setCurrentUser({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        height: values.height,
+        weight: values.weight,
+      }))
+    }).catch(err => console.log(err))
   }
+
+  // add field in db and add radio button here asking which units to use throughout the app
   const numberToFeet = (input: number) => {
     const feet = Math.floor(input / 12);
     const inches = input % 12;

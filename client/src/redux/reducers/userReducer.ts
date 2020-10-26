@@ -1,37 +1,37 @@
 export interface UserState { 
   firstName: string , 
   lastName: string,
-  sub: string | null,
-  id?: number,
+  sub?: string | null,
   height: number,
   weight: number,
-  fitnessLevel: number,
 }
 
 const defaultUser: UserState = {
   firstName: '',
   lastName: '',
   sub: '',
-  id: -1,
   height: 0,
   weight: 0,
-  fitnessLevel: 0
 }
 
-import { GET_USER, REMOVE_CURRENT_USER, SET_CURRENT_USER } from '../actionTypes'
+import { GET_USER, REMOVE_CURRENT_USER, SET_CURRENT_USER, UPDATE_USER } from '../actionTypes'
 import { setCurrentUser } from '../actions';
 
 export default function userReducer (user: UserState = defaultUser, action: any) {
+  let userAction = action.user;
   switch (action.type) {
 
     case GET_USER:
-      return action.user;
+      return userAction;
 
     case SET_CURRENT_USER:
-      return action.user;
+      return userAction;
 
     case REMOVE_CURRENT_USER:
       return {};
+
+    case UPDATE_USER:
+      return { ...user, userAction }
 
     default:
       return user;
