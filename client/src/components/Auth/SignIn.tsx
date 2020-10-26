@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
-import { Button } from "native-base";
+import { Button, Spinner } from "native-base";
 import { validateEmail } from '../../validation';
 import { Auth } from "aws-amplify";
 import { red, darkBlue } from '../../styles/colors';
@@ -34,6 +34,9 @@ function SignIn(props: any) {
   }
 
   if(props.authState === 'signIn') {
+    if(!props.authData) {
+      return <Spinner color='blue' />
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Sign In</Text>
