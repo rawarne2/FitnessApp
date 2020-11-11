@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { Text } from 'native-base';
+import { Text, Spinner } from 'native-base';
 import { Auth } from 'aws-amplify';
 import CreateProfile from './CreateProfile';
 import { useDispatch, useSelector } from "react-redux";
@@ -27,11 +27,11 @@ const Home = (props: any) => {
 
   let dispatch = useDispatch();
   let userState = useSelector((state: RootState) => state.user)
-  const [userQuery, { loading, data }] = useLazyQuery(USER_QUERY)
+  const [userQuery, { loading, data, error }] = useLazyQuery(USER_QUERY)
   
   useEffect(() => {
     Auth.currentUserInfo().then(user => {
-      userQuery({variables: {sub: user?.attributes?.sub,}})
+      user && userQuery({variables: {sub: user?.attributes?.sub,}})
     }).catch(err => {
       console.log(err)
     })
@@ -48,7 +48,6 @@ const Home = (props: any) => {
     }))
     }
   }, [data])
-  console.log({ loading, data, userState })
 
   // userQuery({variables: {sub: sub}})
   // AsyncStorage.getAllKeys().then(keys => console.log(keys))
@@ -59,7 +58,11 @@ const Home = (props: any) => {
   // not be able to access their data
 
   if(props.authState === 'signedIn') {
-    return (userState.sub && userState.firstName) ? (  // ensures user created a profile
+    if(!userState.height) {  
+      // since there is a default height for createProfile, this prevents showing createProfile unnecessarily
+      return <Spinner color='blue' />
+    }
+    return (userState.sub && userState.firstName) ? (
         <Text>Hello World</Text>
       ) : (
         <View>

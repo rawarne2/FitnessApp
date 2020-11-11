@@ -16,8 +16,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Root } from "native-base";
 
 const client = new ApolloClient({
-  uri: 'http://127.0.0.1:5000/graphql',  // change to allow productions uri and get from env
-  cache: new InMemoryCache()
+  uri: 'http://192.168.1.142:5000/graphql',
+  cache: new InMemoryCache(),
 });
 
 Amplify.configure(awsExports)
